@@ -1,72 +1,127 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:medforall/pages/tutorial.dart';
+import 'generated/l10n.dart';
 import 'registration.dart';
 import 'login.dart';
-void main() {
+import 'package:medforall/pages/controller.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: <Widget>[
-                  Component2Widget(),
-                  Positioned(
-                    top: constraints.maxHeight * 0.03,
-                    left: constraints.maxWidth * 0.03,
-                    right: constraints.maxWidth * 0.03,
-                    child: ImageSliderWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.60,
-                    left: constraints.maxWidth * 0.03,
-                    right: constraints.maxWidth * 0.03,
-                    child: BoxWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.57,
-                    left: constraints.maxWidth * 0.40,
-                    child: LogoWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.69,
-                    left: constraints.maxWidth * 0.31,
-                    child: AppNameWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.74,
-                    left: constraints.maxWidth * 0.03,
-                    right: constraints.maxWidth * 0.03,
-                    child: CommentWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.80,
-                    left: constraints.maxWidth * 0.17,
-                    child: GetStartedWidget(),
-                  ),
-                  Positioned(
-                    top: constraints.maxHeight * 0.85,
-                    left: constraints.maxWidth * 0.19,
-                    child: NamesmallWidget(),
-                  ),
-                ],
-              );
+    return BlocProvider(
+      create: (context) => LanguageCubit(),
+      child: BlocBuilder<LanguageCubit, Locale>(
+        builder: (context, locale) {
+          return MaterialApp(
+            locale: locale,
+            supportedLocales: S.delegate.supportedLocales, // Keep only one supportedLocales definition
+            localizationsDelegates: [
+              S.delegate, // Ensure this import path is correct
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              if (locale != null) {
+                for (var supportedLocale in supportedLocales) {
+                  if (supportedLocale.languageCode == locale.languageCode) {
+                    return supportedLocale;
+                  }
+                }
+              }
+              return supportedLocales.first; // Default fallback
             },
-          ),
-        ),
+            home: MyHomePage(),
+          );
+        },
       ),
     );
   }
 }
 
+class LanguageCubit extends Cubit<Locale> {
+  LanguageCubit() : super(const Locale('en', 'US')); // Default language is English
+
+  void switchToArabic() {
+    emit(const Locale('ar', 'AE'));
+  }
+
+  void switchToEnglish() {
+    emit(const Locale('en', 'US'));
+  }
+}
+
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: <Widget>[
+                Component2Widget(),
+                Positioned(
+                  top: constraints.maxHeight * 0.03,
+                  left: constraints.maxWidth * 0.03,
+                  right: constraints.maxWidth * 0.03,
+                  child: ImageSliderWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.60,
+                  left: constraints.maxWidth * 0.03,
+                  right: constraints.maxWidth * 0.03,
+                  child: BoxWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.57,
+                  left: constraints.maxWidth * 0.40,
+                  child: LogoWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.69,
+                  left: constraints.maxWidth * 0.31,
+                  child: AppNameWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.74,
+                  left: constraints.maxWidth * 0.03,
+                  right: constraints.maxWidth * 0.03,
+                  child: CommentWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.80,
+                  left: constraints.maxWidth * 0.17,
+                  child: GetStartedWidget(),
+                ),
+                Positioned(
+                  top: constraints.maxHeight * 0.85,
+                  left: constraints.maxWidth * 0.19,
+                  child: NamesmallWidget(),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
 class Component2Widget extends StatelessWidget {
   @override
@@ -75,7 +130,7 @@ class Component2Widget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(62, 156, 143, 1.0), // Single solid color
+        color: Color.fromRGBO(62, 156, 143, 1.0),
       ),
     );
   }
@@ -132,14 +187,13 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.5,
-      width : MediaQuery.of(context).size.width * 0.35,
+      width: MediaQuery.of(context).size.width * 0.35,
       child: PageView.builder(
         controller: _pageController,
         itemCount: _images.length,
         itemBuilder: (context, index) {
           return Image.asset(
             _images[index],
-            // fit: BoxFit.cover,
           );
         },
       ),
@@ -210,13 +264,11 @@ class CommentWidget extends StatelessWidget {
   }
 }
 
-
 class GetStartedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to RegistrationWidget with slide animation from right to left
         Navigator.push(
           context,
           PageRouteBuilder(
@@ -224,8 +276,8 @@ class GetStartedWidget extends StatelessWidget {
                 RegistrationWidget(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0); // Start from right
-              const end = Offset.zero; // End at center
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
               const curve = Curves.easeInOut;
 
               var tween = Tween(begin: begin, end: end)
@@ -291,17 +343,17 @@ class NamesmallWidget extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        // Navigate to LoginPage with slide animation from right to left
                         Navigator.push(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (context, animation, secondaryAnimation) => LoginWidget(),
                             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0); // Start from right
-                              const end = Offset.zero; // End at center
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
                               const curve = Curves.easeInOut;
 
-                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
                               return SlideTransition(
                                 position: animation.drive(tween),
                                 child: child,
@@ -313,7 +365,7 @@ class NamesmallWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
             ),
           ),
         ],

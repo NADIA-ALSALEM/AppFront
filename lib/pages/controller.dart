@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:medforall/pages/donations.dart';
 import 'package:medforall/pages/faq.dart';
 import 'package:medforall/pages/personal_pharmacy.dart';
@@ -7,6 +8,7 @@ import 'package:medforall/pages/settings.dart';
 import 'package:medforall/pages/shortages.dart';
 import 'package:medforall/pages/tutorial.dart';
 import 'package:medforall/widgets/setting_section.dart';
+import 'map_screen.dart'; // Import the MapScreen
 
 class Controller extends StatelessWidget {
   const Controller({super.key});
@@ -22,15 +24,9 @@ class Controller extends StatelessWidget {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         actions: [
-          const Spacer(
-            flex: 1,
-          ),
-          Image.asset(
-            'assets/images/logo.jpg',
-          ),
-          const Spacer(
-            flex: 1,
-          ),
+          const Spacer(flex: 1),
+          Image.asset('assets/images/img_1.png'),
+          const Spacer(flex: 1),
           Text(
             'MED SHARE',
             style: TextStyle(
@@ -39,20 +35,16 @@ class Controller extends StatelessWidget {
               fontSize: screenHeight * 0.025,
             ),
           ),
-          const Spacer(
-            flex: 50,
-          ),
+          const Spacer(flex: 50),
         ],
       ),
       body: ListView(
         children: [
           const SizedBox(height: 20),
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.02,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
             child: Image.asset(
-              'assets/images/medShareMember.png',
+              'assets/images/dashboard.png',
               width: screenWidth * 0.80,
             ),
           ),
@@ -63,14 +55,12 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/settings.svg',
-                title: 'Settings',
+                title: Intl.message('Settings'),
                 centered: true,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const Settings(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const Settings()),
                   );
                 },
               ),
@@ -84,7 +74,7 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/personalPharmacy.svg',
-                title: 'Personal Pharmacy',
+                title: Intl.message('Personal Pharmacy'),
                 centered: false,
                 onPressed: () {
                   Navigator.push(
@@ -101,7 +91,7 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/registerMedicine.svg',
-                title: 'Register Medicine',
+                title: Intl.message('Register Medicine'),
                 centered: false,
                 onPressed: () {
                   Navigator.push(
@@ -122,22 +112,25 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/donationPoints.svg',
-                title: 'Donation Points',
+                title: Intl.message('Donation Points'),
                 centered: false,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MapScreen()),
+                  );
+                },
               ),
               const SizedBox(width: 5),
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/shortages.svg',
-                title: 'Shortages',
+                title: Intl.message('Shortages'),
                 centered: false,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const Shortages(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const Shortages()),
                   );
                 },
               ),
@@ -151,14 +144,12 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/FAQ.svg',
-                title: 'F.A.Q',
+                title: Intl.message('F.A.Q'),
                 centered: false,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const Faq(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const Faq()),
                   );
                 },
               ),
@@ -166,14 +157,12 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: false,
                 image: 'assets/images/tutorial.svg',
-                title: 'Tutorial',
+                title: Intl.message('Tutorial'),
                 centered: false,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const Tutorial(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const Tutorial()),
                   );
                 },
               ),
@@ -187,13 +176,13 @@ class Controller extends StatelessWidget {
               SettingSection(
                 isShareIon: true,
                 image: '',
-                title: 'Donation',
+                title: Intl.message('Donation'),
                 centered: true,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Donations(
+                      builder: (context) => const DonationsPage(
                         showBaseTitle: true,
                       ),
                     ),

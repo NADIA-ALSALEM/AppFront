@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart'; // For localization
+import 'package:medforall/bloc/language_cubit.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -17,24 +21,23 @@ class _SettingsState extends State<Settings> {
     super.initState();
 
     notificationsController.addListener(
-      () {
-        setState(() {
-          if (notificationsController.value) {
-            // turn Notifications on
-          } else {
-            // turn Notifications off
-          }
-        });
+          () {
+        // Handle notifications logic (no setState here)
+        if (notificationsController.value) {
+          // turn Notifications on
+        } else {
+          // turn Notifications off
+        }
       },
     );
 
     languageController.addListener(
-      () {
+          () {
         setState(() {
           if (languageController.value) {
-            // AR language
+            context.read<LanguageCubit>().switchToArabic();
           } else {
-            // EN language
+            context.read<LanguageCubit>().switchToEnglish();
           }
         });
       },
@@ -55,7 +58,7 @@ class _SettingsState extends State<Settings> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Settings',
+          Intl.message('Settings'),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -172,4 +175,12 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+}
+
+// LanguageCubit with language switching logic
+class LanguageCubit extends Cubit<Locale> {
+  LanguageCubit() : super(Locale('en', 'US')); // Default language is English
+
+  void switchToArabic() => emit(Locale('ar', 'AE')); // Switch to Arabic
+  void switchToEnglish() => emit(Locale('en', 'US')); // Switch to English
 }

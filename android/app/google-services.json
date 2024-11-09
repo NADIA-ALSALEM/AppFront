@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "615330060677",
+    "project_id": "med-share-2e85f",
+    "storage_bucket": "med-share-2e85f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615330060677:android:09d7be526b9a1a19624cec",
+        "android_client_info": {
+          "package_name": "com.example.medforall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC72-47KY1JoqqDueKttsoReofKNhv4WZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

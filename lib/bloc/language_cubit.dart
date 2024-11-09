@@ -1,19 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 
-class LanguageState {}
-
-class Arabic extends LanguageState {}
-
-class English extends LanguageState {}
-
-class LanguageCubit extends Cubit<LanguageState> {
-  LanguageCubit() : super(English());
-
-  void switchToEnglish() {
-    emit(English());
-  }
+class LanguageCubit extends Cubit<Locale> {
+  LanguageCubit() : super(Locale('en', 'US')); // Default language is English
 
   void switchToArabic() {
-    emit(Arabic());
+    emit(const Locale('ar', 'AE'));
+  }
+
+  void switchToEnglish() {
+    emit(const Locale('en', 'US'));
   }
 }

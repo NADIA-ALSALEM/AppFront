@@ -28,22 +28,23 @@ class _TutorialState extends State<Tutorial> {
 
   @override
   void initState() {
-    indexNumber = 0;
-
-    // Update the language when the switch value changes
-    languageController.addListener(
-      () {
-        setState(() {
-          if (languageController.value) {
-            context.read<LanguageCubit>().switchToArabic();
-          } else {
-            context.read<LanguageCubit>().switchToEnglish();
-          }
-        });
-      },
-    );
-
     super.initState();
+
+    languageController.addListener(() {
+      if (languageController.value) {
+        context.read<LanguageCubit>().switchToArabic();
+      } else {
+        context.read<LanguageCubit>().switchToEnglish();
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Set initial state of language controller based on current locale
+    languageController.value = Localizations.localeOf(context).languageCode == 'ar';
   }
 
   @override
@@ -63,15 +64,9 @@ class _TutorialState extends State<Tutorial> {
               controller: languageController,
               activeColor: const Color(0xff008000),
               inactiveColor: const Color(0xff1E90FF),
-              activeChild: Text(
-                S.of(context).lang,
-              ),
-              inactiveChild: Text(
-                S.of(context).lang,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15),
-              ),
+              activeChild: Text(S.of(context).lang),
+              inactiveChild: Text(S.of(context).lang),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
               width: screenWidth * 0.26,
               height: screenHeight * 0.05,
               enabled: true,
@@ -86,7 +81,7 @@ class _TutorialState extends State<Tutorial> {
             children: [
               const Spacer(flex: 5),
               Image.asset(
-                'assets/images/logo.jpg',
+                'assets/images/img_1.png',
                 width: screenWidth * 0.4,
               ),
               Text(
@@ -99,9 +94,7 @@ class _TutorialState extends State<Tutorial> {
               ),
               const Spacer(flex: 1),
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.1,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                 child: Text(
                   S.of(context).tutorial_title,
                   textAlign: TextAlign.center,
@@ -143,24 +136,18 @@ class _TutorialState extends State<Tutorial> {
                   width: screenWidth * 0.7,
                   fit: BoxFit.contain,
                 ),
-                const SizedBox(height: 40), // Small space
+                const SizedBox(height: 40),
                 SizedBox(
                   width: screenWidth * 0.90,
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                        const Color(0xff3E9C8F),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff3E9C8F),
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.02,
+                        horizontal: screenWidth * 0.05,
                       ),
-                      padding: WidgetStateProperty.all(
-                        EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.02,
-                          horizontal: screenWidth * 0.05,
-                        ),
-                      ),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     onPressed: () {},
@@ -173,24 +160,18 @@ class _TutorialState extends State<Tutorial> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10), // Space between buttons
+                const SizedBox(height: 10),
                 SizedBox(
                   width: screenWidth * 0.90,
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                        const Color(0xff3E9C8F),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff3E9C8F),
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.02,
+                        horizontal: screenWidth * 0.05,
                       ),
-                      padding: WidgetStateProperty.all(
-                        EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.02,
-                          horizontal: screenWidth * 0.05,
-                        ),
-                      ),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     onPressed: () {},
@@ -216,7 +197,7 @@ class _TutorialState extends State<Tutorial> {
                         width: screenWidth,
                         height: screenHeight * 0.01,
                       ),
-                      const SizedBox(height: 5), // Small space
+                      const SizedBox(height: 5),
                       Text(
                         S.of(context).register_medicines,
                         style: TextStyle(
@@ -237,7 +218,7 @@ class _TutorialState extends State<Tutorial> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10), // Space at the bottom
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -246,12 +227,8 @@ class _TutorialState extends State<Tutorial> {
           ),
         ),
       ),
-      const PersonalPharmacy(
-        showBaseTitle: false,
-      ),
-      const Donations(
-        showBaseTitle: false,
-      ),
+      const PersonalPharmacy(showBaseTitle: false),
+      const DonationsPage(showBaseTitle: false),
     ];
 
     return Scaffold(
@@ -281,62 +258,54 @@ class _TutorialState extends State<Tutorial> {
                 decoration: BoxDecoration(
                   color: indexNumber == 0
                       ? Colors.transparent
-                      : const Color.fromARGB(255, 202, 216, 214),
-                  border: Border.all(
-                    color: indexNumber == 0
-                        ? Colors.transparent
-                        : const Color.fromARGB(255, 202, 216, 214),
+                      : const Color(0xff3E9C8F),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: WidgetStateProperty.all(
-                          const Color(0xff3E9C8F),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.13,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (indexNumber != 0)
+                        IconButton(
+                          onPressed: () {
+                            _pageController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          icon: const Icon(Icons.arrow_back_ios_new),
+                          iconSize: 30,
+                          color: Colors.white,
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        S.of(context).skip_button_child,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                      if (indexNumber != screens.length - 1)
+                        IconButton(
+                          onPressed: () {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          icon: const Icon(Icons.arrow_forward_ios),
+                          iconSize: 30,
+                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                    const Spacer(),
-                    TutorialPageIndicator(
-                      indexNumber: indexNumber,
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: WidgetStateProperty.all(
-                          const Color(0xff3E9C8F),
+                      if (indexNumber == screens.length - 1)
+                        IconButton(
+                          onPressed: () {
+                            // Navigate to your final screen here
+                          },
+                          icon: const Icon(Icons.check),
+                          iconSize: 30,
+                          color: Colors.white,
                         ),
-                      ),
-                      onPressed: () {
-                        if (indexNumber < screens.length - 1) {
-                          _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text(
-                        indexNumber == 3
-                            ? S.of(context).done_button_child
-                            : S.of(context).next_button_child,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

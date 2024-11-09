@@ -18,18 +18,18 @@ class PersonalPharmacy extends StatelessWidget {
 
     List<MedTypeModel> medTypes = [
       MedTypeModel(
-        title: 'title 1',
-        subTitle: 'sub title 1',
+        title: 'Panadol',
+        subTitle: '5/11/2024',
         medType: 'med 1',
       ),
       MedTypeModel(
-        title: 'title 2',
-        subTitle: 'sub title 2',
+        title: 'Ibuprofen',
+        subTitle: '12/12/2024',
         medType: 'med 2',
       ),
       MedTypeModel(
-        title: 'title 3',
-        subTitle: 'sub title 3',
+        title: 'Aspirin',
+        subTitle: '10/12/2024',
         medType: 'med 3',
       ),
       MedTypeModel(
@@ -97,11 +97,14 @@ class PersonalPharmacy extends StatelessWidget {
                   children: [
                     SlidableAction(
                       borderRadius: BorderRadius.circular(14),
-                      onPressed: (context) {},
+                      onPressed: (context) {
+                        // Handle delete action
+                      },
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
                     ),
+
                     const SizedBox(width: 4),
                     SlidableAction(
                       borderRadius: BorderRadius.circular(14),
